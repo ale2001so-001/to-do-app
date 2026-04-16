@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List Profissional</title>
+    <style>
+        /* 1. Layout e Centralização */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        input, select, button#addBtn {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        button#addBtn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* 2. O Contorno Ilustrativo da "Tabela" */
+        .task-board {
+            border: 2px dashed #007bff; /* Contorno estilo moldura */
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 50px;
+            background-color: #fcfcfc;
+        }
+
+        /* 3. Estilo dos Itens da Lista */
+        .task-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Empurra o botão de apagar para o fim */
+            padding: 12px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* Cores de Prioridade */
+        .alta { border-left: 6px solid #e74c3c; }
+        .media { border-left: 6px solid #f1c40f; }
+        .baixa { border-left: 6px solid #2ecc71; }
+
+        .task-content { display: flex; align-items: center; }
+
+        input[type="checkbox"]:checked + span {
+            text-decoration: line-through;
+            color: #bbb;
+        }
+
+        /* 4. Botão de Apagar */
+        .btn-delete {
+            background-color: #ff7675;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .btn-delete:hover { background-color: #d63031; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 style="text-align: center; color: #333;">Gerenciador de Tarefas</h2>
+
+    <div class="input-group">
+        <input type="text" id="taskInput" placeholder="O que vamos fazer hoje?">
+        <select id="priorityInput">
+            <option value="alta">Prioridade: Alta</option>
+            <option value="media">Prioridade: Média</option>
+            <option value="baixa">Prioridade: Baixa</option>
+        </select>
+        <button id="addBtn" onclick="adicionarTarefa()">Adicionar Tarefa</button>
+    </div>
+
+    <div class="task-board">
+        <div id="taskList">
+            </div>
+    </div>
+</div>
+
+<script>
+    function adicionarTarefa() {
+        const input = document.getElementById('taskInput');
+        const priority = document.getElementById('priorityInput');
+        const list = document.getElementById('taskList');
+
+        if (input.value.trim() === '') {
+            alert("Por favor, digite uma tarefa!");
+            return;
+        }
+
+        // Criando o elemento da tarefa
+        const div = document.createElement('div');
+        div.className = `task-item ${priority.value}`;
+
+        // Estrutura Interna: Checkbox + Texto e Botão Apagar
+        div.innerHTML = `
+            <div class="task-content">
+                <input type="checkbox">
+                <span style="margin-left: 10px;">${input.value}</span>
+            </div>
+            <button class="btn-delete" onclick="removerTarefa(this)">Apagar</button>
+        `;
+
+        list.appendChild(div);
+
+        // Limpa o campo para a próxima
+        input.value = '';
+    }
+
+    // Função para remover a tarefa
+    function removerTarefa(botao) {
+        // O "this" enviado é o botão. O parentElement é a div .task-item
+        const tarefaParaRemover = botao.parentElement;
+        tarefaParaRemover.remove();
+    }
+</script>
+
+</body>
+</html>
